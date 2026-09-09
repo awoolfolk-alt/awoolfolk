@@ -20,6 +20,7 @@ I also want to me fluent in computer language**
  <li>Develop practical skills</li>
  <li>Explore specialization</li>
   </ul>
+  
 </details>
 
 **Reach Me @**  
