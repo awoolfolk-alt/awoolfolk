@@ -8,6 +8,6 @@ I'm currently working on the Medline Operations Problem Navigator
 
 **My Goal this cycle is to be more efficient with networking and presentation giving, I also want to me fluent in computer language**  
 
-**Reach Me @**
+**Reach Me @**  
   +[My Inter e-mail account ](awoolfolk@icstars.org)  
   +[My gmail account](andrewoolfolkjr98@gmail.com)
