@@ -10,5 +10,5 @@ I also want to me fluent in computer language**
 
 **Reach Me @**  
   +[My Intern e-mail account ](awoolfolk@icstars.org)  
-  +[My gmail account](andrewoolfolkjr98@gmail.com)
+  +[My gmail account](andrewoolfolkjr98@gmail.com)  
   +[My linkedin](https://www.linkedin.com/in/andre-woolfolk-335243121/)  
