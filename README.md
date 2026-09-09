@@ -15,9 +15,9 @@ I also want to me fluent in computer language**
 <details>
 <summary>Currently Learning</summary>
   
-+Learning Essential Tools
-+Develop practical skills
-+Explore specialization
+-Learning Essential Tools
+-Develop practical skills
+-Explore specialization
 
 </details>
 
