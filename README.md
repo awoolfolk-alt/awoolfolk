@@ -1,5 +1,7 @@
 <div>
+  
   <img src="https://github.com/awoolfolk.png" width="100" />
+  
 <h1>Hi, my name is Andre Woolfolk</h1>
   </div>
 I'm a cycle 60 intern at I.C.Stars  
