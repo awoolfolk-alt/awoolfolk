@@ -10,7 +10,8 @@ I'm currently working on the Medline Operations Problem Navigator
 **I'm currently building** Project for Medline.  
 
 **My Goal for this cycle is to be more efficient with networking and presentation giving,  
-I also want to me fluent in computer language** 
+I also want to me fluent in computer language**   
+**I did earn a certification for cybersecurity** 
 
 <details>
 <summary>Currently Learning</summary>
@@ -19,7 +20,8 @@ I also want to me fluent in computer language**
 <li>Develop practical skills</li>
 <li>Explore specialization</li>
 </ul>
-</details>
+</details>  
+
 
 **Reach Me @**  
   +[My Intern e-mail account ](awoolfolk@icstars.org)  
