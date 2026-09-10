@@ -14,13 +14,11 @@ I also want to me fluent in computer language**
 
 <details>
 <summary>Currently Learning</summary>
-
-  <ul>
- <li>Learning Essential Tools</li>
- <li>Develop practical skills</li>
- <li>Explore specialization</li>
-  </ul>
-  
+<ul>
+<li>Learning Essential Tools</li>
+<li>Develop practical skills</li>
+<li>Explore specialization</li>
+</ul>
 </details>
 
 **Reach Me @**  
