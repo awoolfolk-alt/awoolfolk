@@ -1,0 +1,101 @@
+npm install
+npm run dev:root {
+--accent: #0c0d0d;
+--ink: #1f2933;
+--muted: #6b7280;
+--bg: #f3f4f6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+font-family: system-ui, -apple-system, sans-serif;
+color: var(--ink);
+line-height: 1.6;
+background: var(--bg);
+}
+
+header {
+position: sticky;
+top: 0;
+background: var(--bg);
+
+
+border-bottom: 1px solid #e5e7eb;
+}
+nav {
+display: flex;
+gap: 1.5rem;
+justify-content: center;
+padding: 1rem;
+}
+nav a {
+text-decoration: none;
+color: var(--ink);
+font-weight: 600;
+}
+nav a:hover { color: var(--accent); }
+main {
+max-width: 720px;
+margin: 0 auto;
+padding: 2rem 1.25rem;
+}
+section {
+padding: 2.5rem 0;
+border-bottom: 1px solid #B7B9A8;
+}
+#hero { text-align: center; padding: 4rem 0; }
+h1 { font-size: 2.5rem; }
+.tagline {
+color: var(--muted);
+font-size: 1.1rem;
+margin-top: 0.5rem;
+}
+h2 { margin-bottom: 1rem; color: var(--accent); }
+
+.project {
+padding: 1rem;
+border: 1px solid #0c0d0d;
+
+
+border-radius: 8px;
+margin-bottom: 1rem;
+}
+.game-board {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 0.5rem;
+width: min(100%, 18rem);
+margin: 1rem 0;
+}
+.game-cell {
+aspect-ratio: 1;
+border: 1px solid #9ca3af;
+border-radius: 8px;
+background: #fff;
+color: var(--accent);
+font: inherit;
+font-size: 2rem;
+font-weight: 700;
+cursor: pointer;
+}
+.game-cell:hover:enabled {
+background: #e5e7eb;
+}
+.game-cell:focus-visible,
+#game-reset:focus-visible {
+outline: 3px solid #2563eb;
+outline-offset: 2px;
+}
+#game-reset {
+padding: 0.6rem 1rem;
+border: 0;
+border-radius: 6px;
+background: var(--accent);
+color: #fff;
+font: inherit;
+cursor: pointer;
+}
+footer {
+text-align: center;
+padding: 2rem;
+color: var(--muted);
+}

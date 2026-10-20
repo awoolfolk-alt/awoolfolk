@@ -7,7 +7,7 @@
 I'm a cycle 60 intern at I.C.Stars  
 I'm currently working on the Medline Operations Problem Navigator
 
-**I'm currently building** Project for Medline.  
+The Canary signal an OPN Project for Medline.  
 
 **My Goal for this cycle is to be more efficient with networking and presentation giving,  
 I also want to be fluent in computer language**   
