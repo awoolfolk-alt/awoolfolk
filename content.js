@@ -19,7 +19,7 @@ const PROFILE = {
   github: "https://github.com/awoolfolk-alt",
   linkedin: "https://www.linkedin.com/in/andre-woolfolk-335243121/",
   resume: "",                   // e.g. "assets/Andre-Woolfolk-Resume.pdf"
-  game: "https://awoolfolk-alt.github.io/Andre-legends/game/" // The Legend of Andre (Phaser game on GitHub Pages)
+  game: "https://awoolfolk-alt.github.io/Andre-legends/" // The Legend of Andre (Phaser game on GitHub Pages)
 };
 
 const CHAPTERS = [
@@ -204,7 +204,7 @@ const PROJECTS = {
       image: "",
       text: "<p>A browser game about my journey. You play the hero, walk through my story, and fight challenges that stand for real lessons I've learned. Inside the world there's a cybersecurity training building I built to study for Security+ and my goal of becoming a SOC Analyst: typing drills, quizzes, phishing practice, SQL and packet labs, and a mock SOC shift. I'm still building it, one feature at a time.</p>",
       links: [
-        { label: "Play the game", url: "https://awoolfolk-alt.github.io/Andre-legends/game/" },
+        { label: "Play the game", url: "https://awoolfolk-alt.github.io/Andre-legends/" },
         { label: "Code on GitHub", url: "https://github.com/awoolfolk-alt/Andre-legends" }
       ]
     },
