@@ -209,6 +209,28 @@ const PROJECTS = {
       ]
     },
     {
+      title: "Cycle 60 Technical Study Pack",
+      tag: "Study tool · HTML, CSS, JavaScript",
+      image: "media/flashcards-study-pack.jpg",
+      alt: "The Cycle 60 study pack: flashcard stats above a pixel battle arena",
+      text: "<p>A study site I built so my cycle has something to come back to after commencement. Page 1 has 354 flashcards on Python, SQL, Git, React, Node/Express, Docker, testing, cloud, AI prompting, and our capstone app. You can filter by category and level, shuffle, and mark cards <i>Got it</i> or <i>Still learning</i>. Page 2 turns the internship into 29 plain-language lessons with quizzes. To keep studying fun, a pixel battle arena levels up as you answer, and your progress saves in your own browser. It's one self-contained file that works offline, and the cards export to Quizlet or Anki.</p>",
+      links: [
+        { label: "Open the study pack", url: "https://awoolfolk-alt.github.io/icstars-flashcards/" },
+        { label: "Code on GitHub", url: "https://github.com/awoolfolk-alt/icstars-flashcards" }
+      ]
+    },
+    {
+      title: "Study Buddy",
+      tag: "Interactive character · JavaScript & Canvas",
+      image: "media/study-buddy.jpg",
+      alt: "The pixel-art study buddy doing four emotes: wave, cheer, laugh, and heart",
+      text: "<p>A pixel-art buddy I designed to keep people company while they study, and the same one who follows you around this portfolio. He's drawn entirely in code, pixel by pixel on a canvas, with no image files. He busts out of the screen, follows your cursor with his eyes, and you can drag him anywhere: drop him on a side and he leans on it, drop him at the top and he hangs. Click him for emotes, hold him to charge an energy beam, or leave him alone and he meditates, naps, and eventually pulls up a gaming chair. On this site he also races the running man and turns the pages like a book.</p>",
+      links: [
+        { label: "Meet him in the study pack", url: "https://awoolfolk-alt.github.io/icstars-flashcards/" },
+        { label: "See him on my game page", url: "legend.html" }
+      ]
+    },
+    {
       title: "The Crew Chronicle",
       tag: "Buffalo Soldiers leadership workshop · HTML & CSS",
       image: "media/buffalo-front-page.png",
