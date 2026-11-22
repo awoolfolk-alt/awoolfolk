@@ -18,7 +18,7 @@ const PROFILE = {
   email: "awoolfolk@icstars.org",
   github: "https://github.com/awoolfolk-alt",
   linkedin: "https://www.linkedin.com/in/andre-woolfolk-335243121/",
-  resume: "",                   // e.g. "assets/Andre-Woolfolk-Resume.pdf"
+  resume: "resume/",            // my resume page (resume/index.html), with a PDF download
   game: "https://awoolfolk-alt.github.io/Andre-legends/" // The Legend of Andre (Phaser game on GitHub Pages)
 };
 

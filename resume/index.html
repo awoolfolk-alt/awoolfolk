@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andre Woolfolk | Resume</title>
+  <meta name="description" content="Resume of Andre Woolfolk, Entry-Level SOC Analyst, Chicago, Illinois." />
+  <style>
+    /* Resume page.
+       On screen: a white "sheet of paper" on the portfolio's dark background.
+       When printed or saved as PDF: just the paper, no buttons. */
+    :root { --ink: #1b1f2a; --muted: #4a5163; --accent: #1f3f73; --rule: #c9d1e0; --night: #070b18; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--night); color: var(--ink); font-family: Calibri, Carlito, "Segoe UI", Arial, sans-serif; font-size: 15px; line-height: 1.4; padding: 16px; }
+    a { color: var(--accent); }
+    .bar { max-width: 8.5in; margin: 0 auto 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .bar a { font: 600 14px "Segoe UI", Arial, sans-serif; color: #eef2fb; text-decoration: none; padding: 8px 12px; border: 2px solid #2a3d6e; background: #131f3f; }
+    .bar a:hover, .bar a:focus-visible { border-color: #e8b64a; outline: none; }
+    .bar a.primary { background: #e8b64a; color: #1a1205; border-color: #f6d68a; }
+    .page { max-width: 8.5in; margin: 0 auto; background: #fff; padding: 0.6in 0.7in; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
+
+    header { text-align: center; padding-bottom: 10px; border-bottom: 2px solid var(--accent); }
+    h1 { font-size: 30px; letter-spacing: 3px; color: var(--accent); line-height: 1.1; }
+    .headline { font-size: 16px; font-weight: 700; margin-top: 2px; }
+    .contact { margin-top: 4px; color: var(--muted); font-size: 14px; }
+    .contact span + span::before { content: "|"; margin: 0 8px; color: var(--rule); }
+
+    h2 { font-size: 14px; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; margin: 14px 0 6px; padding-bottom: 2px; border-bottom: 1px solid var(--rule); }
+    p { margin-bottom: 4px; }
+    .org { font-weight: 700; margin-top: 8px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .role { font-weight: 700; font-style: italic; }
+    .org + .row .role, .row.first .role { margin-top: 0; }
+    .date { white-space: nowrap; color: var(--muted); font-size: 14px; }
+    ul { margin: 2px 0 6px 18px; }
+    li { margin-bottom: 2px; }
+    .skills p b { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      body { padding: 16px 0; }
+      .bar { padding: 0 16px; }
+      .page { padding: 24px 16px; }
+      h1 { font-size: 24px; letter-spacing: 2px; }
+      .row { flex-direction: column; gap: 0; }
+      .contact span { display: block; }
+      .contact span + span::before { content: none; }
+    }
+    @media print {
+      @page { size: letter; margin: 0.35in 0.5in; }
+      body { background: #fff; padding: 0; font-size: 9.3pt; line-height: 1.25; }
+      h1 { font-size: 22pt; }
+      .headline { font-size: 11pt; }
+      .contact, .date { font-size: 9.3pt; }
+      h2 { font-size: 9.8pt; margin: 7px 0 3px; }
+      .org { margin-top: 5px; }
+      ul { margin: 1px 0 4px 16px; }
+      li { margin-bottom: 1px; }
+      .bar { display: none; }
+      .page { box-shadow: none; padding: 0; max-width: none; }
+      a { color: var(--accent); text-decoration: none; }
+      h2 { break-after: avoid; }
+      li, .row { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="bar" aria-label="Resume actions">
+    <a href="../index.html">&larr; Back to portfolio</a>
+    <a class="primary" href="Andre-Woolfolk-Resume.pdf" download>Download PDF</a>
+  </nav>
+
+  <main class="page">
+    <header>
+      <h1>ANDRE WOOLFOLK</h1>
+      <p class="headline">Entry-Level SOC Analyst</p>
+      <p class="contact">
+        <span>Chicago, Illinois</span>
+        <span><a href="mailto:awoolfolk@icstars.org">awoolfolk@icstars.org</a></span>
+        <span><a href="https://www.linkedin.com/in/andre-woolfolk-335243121/" target="_blank" rel="noopener">linkedin.com/in/andre-woolfolk-335243121</a></span>
+      </p>
+    </header>
+
+    <section>
+      <h2>Career Objective</h2>
+      <p>People-first operations professional with 8+ years of experience investigating sensitive customer cases, documenting escalations and troubleshooting equipment under pressure. Seeking a SOC Analyst I (night shift) role where I can analyze alerts, write clear case documentation and bring positive, action-driven leadership to help keep people safer. Transitioning into cybersecurity through i.c.stars and the Google Cybersecurity Professional Certificate, with guided lab practice in SIEM, Wireshark, Suricata IDS, SQL and the Linux command line.</p>
+    </section>
+
+    <section>
+      <h2>Work Experience</h2>
+
+      <p class="org">Empire Cooler, Chicago, IL</p>
+      <div class="row"><span class="role">Preventive Maintenance (PM) Technician</span><span class="date">Dec 2024 – Jun 2025</span></div>
+      <ul>
+        <li>Earned a promotion from Delivery Driver after 18 months through strong work ethic and adaptability.</li>
+        <li>Advocated for stronger technician training after a 3-month onboarding (vs. the typical 6–8 months), prompting department-wide troubleshooting Q&amp;A sessions with ice machine manufacturers.</li>
+        <li>Built lasting client relationships as the on-site point of contact, resolving client needs in the moment and following through on service, billing and scheduling questions.</li>
+        <li>Diagnosed and serviced up to 5–6 commercial ice machines a day at client sites, using manufacturer documentation and error codes to resolve issues and consistently surpass daily service goals.</li>
+      </ul>
+      <div class="row"><span class="role">Delivery Driver</span><span class="date">Jun 2023 – Dec 2024</span></div>
+      <ul>
+        <li>Coordinated delivery windows with dispatchers and clients to keep routes on schedule.</li>
+        <li>Performed routine vehicle inspections and followed all traffic laws and company safety policies.</li>
+      </ul>
+
+      <p class="org">Nike</p>
+      <div class="row"><span class="role">Sales Associate</span><span class="date">Feb 2017 – Mar 2023</span></div>
+      <ul>
+        <li>Led men's footwear (~75% of store sales), then stepped up to run all footwear, planning and delegating work for 18 associates across men's, women's and kids'.</li>
+        <li>Built a merchandising process that paired community-focused products with strategic markdowns and themed displays powering weekly, monthly and seasonal campaigns, including the Chicago Marathon, 2020 NBA All-Star and Back to School, that consistently beat sales targets.</li>
+        <li>Mentored and onboarded 50+ new hires on product knowledge, customer service and store procedures.</li>
+      </ul>
+      <div class="row"><span class="role">Customer Support Analyst (Nike Online, Remote)</span><span class="date">Jun 2019 – Feb 2020</span></div>
+      <ul>
+        <li>Investigated sensitive refund and missing-package claims by reviewing order histories and customer interactions; documented findings and escalated suspicious cases in line with policy.</li>
+        <li>Resolved customer chats and partnered with IT and compliance teams to speed up resolution of escalated cases.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="row"><span><b>Technology &amp; Leadership Internship</b> — i.c.stars, Chicago, IL</span><span class="date">Aug 2026 – Dec 2026 (expected)</span></div>
+      <ul>
+        <li>Building a client-sponsored software project in an Agile consulting team.</li>
+        <li>Relevant coursework: SQL, SSMS, Python, Excel, JavaScript, React, APIs, data modeling, AI/Copilot.</li>
+      </ul>
+      <div class="row"><span><b>High School Diploma</b> — Gary Comer College Prep, Chicago, IL</span><span class="date">2016</span></div>
+    </section>
+
+    <section class="skills">
+      <h2>Skills</h2>
+      <p><b>Technical:</b> SIEM, Wireshark and Suricata IDS/IPS (training labs) · Windows and Linux command line · Python (basic scripting) · SQL and SSMS · Excel · TCP/IP, DNS, HTTP · Equipment diagnostics</p>
+      <p><b>Transferable:</b> Alert and incident triage · Escalation · Investigative thinking · Case documentation · Written and verbal communication · Mentoring and onboarding · Process improvement</p>
+    </section>
+
+    <section>
+      <h2>Certifications</h2>
+      <div class="row"><span><a href="https://www.coursera.org/account/accomplishments/specialization/certificate/3LN0AT1HO4R1" target="_blank" rel="noopener"><b>Google Cybersecurity Professional Certificate</b></a> — Google / Coursera</span><span class="date">Jan 2025</span></div>
+      <ul>
+        <li>Coursework: incident management, intrusion detection and prevention, vulnerability assessment, incident response.</li>
+      </ul>
+      <div class="row"><span><b>CompTIA Security+</b> · <b>Splunk Core Certified User</b></span><span class="date">Planned</span></div>
+    </section>
+
+    <section>
+      <h2>Volunteer &amp; Community</h2>
+      <div class="row"><span><b>Demolition Volunteer</b> — Rebuild Da Block, Chicago, IL</span><span class="date">Jun – Sep 2021</span></div>
+      <ul>
+        <li>Demolished and staged 5 vacant homes for rebuild as affordable housing, gaining drywall, plumbing and blueprint-reading skills.</li>
+      </ul>
+      <div class="row"><span><b>Annual Wellness Walk</b> — Participant</span><span class="date">2024 – Present</span></div>
+      <ul>
+        <li>Walk from 67th St to Navy Pier along the lakefront each year to promote mental and physical wellness and motivate others.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
