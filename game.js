@@ -1,3 +1,20 @@
+function startGameLoop(update) {
+  let frame = null;
+  function tick(timestamp) {
+    frame = null;
+    if (document.body.classList.contains("soundtrack-mode")) return;
+    update(timestamp);
+    schedule();
+  }
+  function schedule() {
+    if (frame === null && !document.body.classList.contains("soundtrack-mode")) {
+      frame = requestAnimationFrame(tick);
+    }
+  }
+  addEventListener("portfolio-viewchange", schedule);
+  schedule();
+}
+
 const cells = Array.from(document.querySelectorAll(".game-cell"));
 const status = document.querySelector("#game-status");
 const resetButton = document.querySelector("#game-reset");
@@ -261,11 +278,10 @@ if (snakeCanvas && snakeStatus && snakeReset) {
       }
       drawSnake();
     }
-    requestAnimationFrame(updateSnake);
   }
 
   resetSnake();
-  requestAnimationFrame(updateSnake);
+  startGameLoop(updateSnake);
 }
 
 const breakoutCanvas = document.querySelector("#breakout-canvas");
@@ -445,11 +461,10 @@ if (breakoutCanvas && breakoutStatus && breakoutReset) {
     }
 
     drawBreakout();
-    requestAnimationFrame(updateBreakout);
   }
 
   startBreakout();
-  requestAnimationFrame(updateBreakout);
+  startGameLoop(updateBreakout);
 }
 
 const shooterCanvas = document.querySelector("#shooter-canvas");
@@ -714,7 +729,6 @@ if (shooterCanvas && shooterStatus && shooterReset) {
     }
 
     drawShooter();
-    requestAnimationFrame(updateShooter);
   }
 
   shooterCanvas.addEventListener("pointermove", (event) => {
@@ -756,5 +770,5 @@ if (shooterCanvas && shooterStatus && shooterReset) {
   shooterReset.addEventListener("click", resetShooter);
 
   resetShooter();
-  requestAnimationFrame(updateShooter);
+  startGameLoop(updateShooter);
 }

@@ -1,0 +1,36 @@
+/* Tab pages: kept basic on purpose (same colors as the front page). */
+:root {
+  --night: #070b18; --panel: #131f3f; --line: #2a3d6e;
+  --gold: #e8b64a; --energy: #5ad1ff;
+  --text: #eef2fb; --muted: #a9b6d6;
+  --body: "Inter", system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--night); color: var(--text); font-family: var(--body); line-height: 1.65; }
+a { color: var(--energy); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; border-bottom: 2px solid var(--line); background: var(--panel); }
+.tabs a { color: var(--muted); text-decoration: none; padding: 6px 10px; border: 1px solid transparent; font-size: 14px; }
+.tabs a:hover, .tabs a[aria-current="page"] { color: var(--text); border-color: var(--gold); }
+main { max-width: 900px; margin: 0 auto; padding: 36px 16px 56px; }
+h1 { font-size: 34px; line-height: 1.2; }
+.sub { color: var(--muted); margin: 4px 0 14px; }
+.intro { margin-bottom: 10px; }
+.req { color: var(--gold); font-size: 14px; }
+.boss { margin: 18px 0; padding: 14px; border: 1px solid var(--line); }
+h2 { font-size: 22px; margin: 30px 0 4px; }
+.group-sub { color: var(--muted); font-size: 14px; }
+.quest { margin-top: 18px; padding: 18px; border: 1px solid var(--line); background: var(--panel); }
+.quest h3 { font-size: 18px; margin-bottom: 6px; }
+.quest .status { font-size: 12px; color: var(--muted); }
+.quest.done .status { color: var(--gold); }
+.quest p + p, .quest div p { margin-top: 10px; }
+.quest .prompt { color: var(--muted); font-style: italic; }
+.quest .links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 12px; }
+.quest img, .quest video { max-width: 100%; height: auto; display: block; }
+.quest figure { margin: 14px 0; }
+.quest figcaption { color: var(--muted); font-size: 13px; margin-top: 6px; }
+table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+.ok { color: var(--gold); }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 16px; border-top: 1px solid var(--line); }
+.quest .project-img { margin: 8px 0 12px; border: 1px solid var(--line); max-height: 520px; width: 100%; object-fit: cover; object-position: top; }

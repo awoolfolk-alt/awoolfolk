@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Legend of Andre | Andre Woolfolk Portfolio</title>
+  <meta name="description" content="Andre Woolfolk's i.c.stars C60 digital portfolio, told as a game: where I was, where I am, and where I'm going." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+       Why: every color lives here once. Change a token and the
+       whole site updates. This is the same idea as a "theme" in a game.
+       ============================================================ */
+    :root {
+      --night: #070b18;        /* deepest background */
+      --navy: #0f1a35;         /* the hero's coat */
+      --panel: #131f3f;        /* cards */
+      --panel-2: #1a2a52;
+      --line: #2a3d6e;
+      --gold: #e8b64a;         /* legacy / leadership */
+      --gold-soft: #f6d68a;
+      --energy: #5ad1ff;       /* after-image blue */
+      --text: #eef2fb;
+      --muted: #a9b6d6;
+      --pixel: "Press Start 2P", monospace;
+      --body: "Inter", system-ui, sans-serif;
+      --accent: var(--gold);   /* each chapter overrides this */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--night);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.65;
+      overflow-x: hidden;
+      padding-bottom: 84px; /* room for the journey bar */
+    }
+    a { color: var(--energy); }
+    img { max-width: 100%; }
+
+    /* ============================================================
+       TITLE SCREEN
+       ============================================================ */
+    .title-screen {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 96px 16px 64px;
+    }
+    #sky { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .layer {
+      position: absolute; left: -5%; width: 110%; bottom: 0;
+      transition: transform 0.25s ease-out;
+      pointer-events: none;
+    }
+    .layer svg { display: block; width: 100%; height: auto; }
+
+    .title-content { position: relative; z-index: 2; max-width: 820px; }
+    .eyebrow {
+      font-family: var(--pixel); font-size: 10px; letter-spacing: 2px;
+      color: var(--energy); margin-bottom: 20px;
+    }
+    .game-title {
+      font-family: var(--pixel);
+      font-size: clamp(22px, 5.4vw, 52px);
+      line-height: 1.35;
+      color: var(--gold-soft);
+      text-shadow: 0 0 18px rgba(232,182,74,0.45), 4px 4px 0 #3a2508;
+    }
+    .game-title span { display: block; font-size: 0.45em; color: var(--text); margin-top: 14px; text-shadow: 3px 3px 0 #000; }
+    .who { margin: 26px auto 6px; font-size: 18px; font-weight: 600; }
+    .who-sub { color: var(--muted); font-size: 15px; }
+    .quote { margin: 26px auto 0; max-width: 560px; font-style: italic; color: var(--gold-soft); }
+
+    #hero-title { width: 96px; height: 128px; image-rendering: pixelated; margin: 30px auto 4px; display: block; }
+
+    .menu {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+      margin-top: 30px;
+    }
+    .btn {
+      font-family: var(--pixel); font-size: 11px; line-height: 1.4;
+      padding: 14px 18px;
+      color: var(--text); text-decoration: none;
+      background: var(--panel);
+      border: 2px solid var(--line);
+      box-shadow: 4px 4px 0 #000;
+      transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+      cursor: pointer;
+    }
+    .btn:hover, .btn:focus-visible {
+      transform: translate(-2px, -2px) scale(1.03);
+      border-color: var(--gold);
+      box-shadow: 6px 6px 0 #000, 0 0 18px rgba(232,182,74,0.35);
+      outline: none;
+    }
+    .btn.primary { background: var(--gold); color: #1a1205; border-color: var(--gold-soft); }
+    .btn.soon { opacity: 0.55; }
+    .btn.soon::after { content: " (soon)"; }
+
+    .contact-line { margin-top: 22px; font-size: 14px; color: var(--muted); }
+    .press-start {
+      margin-top: 40px; font-family: var(--pixel); font-size: 10px; color: var(--muted);
+      animation: blink 1.4s steps(2) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ============================================================
+       WORLD MAP (navigation)
+       ============================================================ */
+    .world-map {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(7,11,24,0.92);
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid var(--line);
+    }
+    .world-map ul {
+      list-style: none; display: flex; gap: 4px; overflow-x: auto;
+      max-width: 1100px; margin: 0 auto; padding: 10px 16px;
+      scrollbar-width: none;
+    }
+    .world-map a {
+      display: block; white-space: nowrap;
+      font-family: var(--pixel); font-size: 9px;
+      color: var(--muted); text-decoration: none;
+      padding: 9px 10px; border: 2px solid transparent;
+    }
+    .world-map a:hover, .world-map a.active { color: var(--text); border-color: var(--gold); }
+
+    .soundtrack-mode .title-screen,
+    .soundtrack-mode #world,
+    .soundtrack-mode footer,
+    .soundtrack-mode .journey,
+    .soundtrack-mode .toast { display: none; }
+    .soundtrack-page {
+      display: none;
+      max-width: 1100px;
+      min-height: calc(100vh - 54px);
+      margin: 0 auto;
+      padding: 0 16px 40px;
+      background: radial-gradient(1200px 600px at 50% -10%, #1a2550 0%, var(--night) 60%);
+    }
+    .soundtrack-mode .soundtrack-page { display: block; }
+    .soundtrack-header { text-align: center; padding: 56px 0 28px; }
+    #soundtrack-page .soundtrack-back { display: inline-block; margin-top: 20px; }
+    .soundtrack-header h1 {
+      font-family: var(--pixel); font-size: clamp(20px, 4.5vw, 40px); line-height: 1.4;
+      color: var(--gold-soft); margin-top: 16px;
+      text-shadow: 0 0 18px rgba(232,182,74,0.4), 4px 4px 0 #3a2508;
+    }
+    .soundtrack-sub { color: var(--muted); margin: 14px auto 0; max-width: 620px; }
+    #soundtrack-page .deck {
+      display: grid; grid-template-columns: minmax(0, 420px) 1fr; gap: 32px; align-items: center;
+      background: linear-gradient(160deg, var(--panel-2), var(--panel));
+      border: 2px solid var(--line); box-shadow: 6px 6px 0 #000;
+      padding: 28px; margin-bottom: 44px;
+    }
+    #soundtrack-page .turntable {
+      position: relative; aspect-ratio: 1.15; width: 100%;
+      background: linear-gradient(145deg, #2b2016, #160f09);
+      border: 2px solid #3d2e1e; border-radius: 10px;
+      box-shadow: inset 0 0 0 6px #1f170f, inset 0 0 30px rgba(0,0,0,0.6);
+    }
+    #soundtrack-page .platter { position: absolute; left: 7%; top: 9%; width: 72%; aspect-ratio: 1; border-radius: 50%; background: #0a0a0d; box-shadow: 0 0 0 4px #2a2a2e, 0 6px 18px rgba(0,0,0,0.7); }
+    #soundtrack-page .tonearm { position: absolute; right: 7%; top: 8%; width: 9%; height: 72%; transform-origin: 50% 9%; transform: rotate(-4deg); transition: transform 0.8s cubic-bezier(.5,.1,.3,1); pointer-events: none; }
+    #soundtrack-page .tonearm .pivot { position: absolute; left: 50%; top: 0; width: 34px; height: 34px; transform: translate(-50%, -20%); border-radius: 50%; background: radial-gradient(circle, #d9d9de 0 35%, #8a8a92 36% 60%, #55555c 61%); }
+    #soundtrack-page .tonearm .arm { position: absolute; left: 50%; top: 8%; width: 6px; height: 82%; transform: translateX(-50%); background: linear-gradient(90deg, #8f9098, #e6e6ea, #8f9098); border-radius: 3px; }
+    #soundtrack-page .tonearm .head { position: absolute; left: 50%; bottom: 0; width: 18px; height: 28px; transform: translateX(-70%) rotate(18deg); background: var(--gold); border-radius: 3px; }
+    #soundtrack-page .deck.playing .tonearm { transform: rotate(22deg); }
+    #soundtrack-page .power { position: absolute; left: 6%; bottom: 6%; width: 12px; height: 12px; border-radius: 50%; background: #3a1010; box-shadow: 0 0 0 3px #1f170f; }
+    #soundtrack-page .deck.playing .power { background: #ff4d4d; box-shadow: 0 0 0 3px #1f170f, 0 0 12px #ff4d4d; }
+    #soundtrack-page .vinyl {
+      --c1: #e8b64a; --c2: #5ad1ff;
+      position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%;
+      background: radial-gradient(circle, transparent 0 31%, rgba(255,255,255,0.05) 31.5% 32%, transparent 32.5%), repeating-radial-gradient(circle, #111114 0 1.2px, #1b1b20 1.6px 2.6px), #111;
+      box-shadow: inset 0 0 0 2px #000;
+    }
+    #soundtrack-page .vinyl::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 30deg, transparent 0 12%, rgba(255,255,255,0.10) 16%, transparent 22% 62%, rgba(255,255,255,0.08) 66%, transparent 72%); }
+    #soundtrack-page .vinyl .label { position: absolute; left: 50%; top: 50%; width: 34%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: conic-gradient(var(--c1) 0 50%, var(--c2) 50% 100%); display: grid; place-items: center; overflow: hidden; }
+    #soundtrack-page .vinyl .label img { width: 100%; height: 100%; object-fit: cover; }
+    #soundtrack-page .vinyl .label::after { content: ""; position: absolute; width: 9%; aspect-ratio: 1; border-radius: 50%; background: #0a0a0d; }
+    #soundtrack-page .spin { animation: soundtrack-spin 1.8s linear infinite; animation-play-state: paused; }
+    #soundtrack-page .deck.playing .spin { animation-play-state: running; }
+    @keyframes soundtrack-spin { to { transform: rotate(360deg); } }
+    #soundtrack-page .now .tag { font-family: var(--pixel); font-size: 9px; color: var(--gold); }
+    #soundtrack-page .now h2 { font-size: clamp(22px, 3vw, 30px); line-height: 1.25; margin-top: 12px; }
+    #soundtrack-page .now .artist { color: var(--energy); font-weight: 600; margin-top: 4px; }
+    #soundtrack-page .now .meta { color: var(--muted); font-size: 14px; margin-top: 2px; }
+    #soundtrack-page .now .note { margin-top: 16px; max-width: 560px; }
+    #soundtrack-page .now .fav { margin-top: 12px; font-size: 14px; color: var(--muted); }
+    #soundtrack-page .now .fav b { color: var(--text); }
+    #soundtrack-page .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    #soundtrack-page .music-btn { font-family: var(--pixel); font-size: 10px; line-height: 1.4; padding: 12px 14px; color: var(--text); text-decoration: none; background: var(--panel); border: 2px solid var(--line); box-shadow: 4px 4px 0 #000; cursor: pointer; transition: transform 0.12s, border-color 0.12s; }
+    #soundtrack-page .music-btn:hover, #soundtrack-page .music-btn:focus-visible { transform: translate(-2px,-2px); border-color: var(--gold); outline: none; }
+    #soundtrack-page .music-btn.primary { background: var(--gold); color: #1a1205; border-color: var(--gold-soft); }
+    #soundtrack-page .section-title { font-family: var(--pixel); font-size: 12px; color: var(--gold); margin-bottom: 18px; }
+    #soundtrack-page .crate { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 28px 22px; padding-bottom: 40px; }
+    #soundtrack-page .record { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+    #soundtrack-page .record .sleeve-wrap { position: relative; aspect-ratio: 1; margin-right: 18%; }
+    #soundtrack-page .record .vinyl { position: absolute; top: 3%; left: 6%; width: 94%; transition: transform 0.45s cubic-bezier(.3,.7,.3,1); }
+    #soundtrack-page .record:hover .vinyl, #soundtrack-page .record:focus-visible .vinyl, #soundtrack-page .record.active .vinyl { transform: translateX(22%) rotate(40deg); }
+    #soundtrack-page .sleeve { position: relative; z-index: 1; width: 100%; height: 100%; border: 2px solid rgba(255,255,255,0.08); box-shadow: 6px 6px 0 #000; overflow: hidden; background: var(--panel); }
+    #soundtrack-page .sleeve img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #soundtrack-page .record:focus-visible { outline: none; }
+    #soundtrack-page .record:focus-visible .sleeve, #soundtrack-page .record.active .sleeve { border-color: var(--gold); }
+    #soundtrack-page .record .title { display: block; margin-top: 12px; font-weight: 700; line-height: 1.3; }
+    #soundtrack-page .record .by { display: block; color: var(--muted); font-size: 14px; }
+    #soundtrack-page .art { position: absolute; inset: 0; }
+    #soundtrack-page .art .initials { position: absolute; left: 10%; bottom: 10%; font-family: var(--pixel); font-size: 18px; color: #fff; text-shadow: 3px 3px 0 rgba(0,0,0,0.5); }
+    #soundtrack-page .editor { display: none; border: 2px dashed var(--line); padding: 22px; margin-bottom: 50px; }
+    #soundtrack-page.edit-mode .editor { display: block; }
+    #soundtrack-page .editor p { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+    #soundtrack-page .form { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+    #soundtrack-page .form label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+    #soundtrack-page .form input, #soundtrack-page .form textarea { font: inherit; font-size: 14px; color: var(--text); background: #0b1226; border: 2px solid var(--line); padding: 8px 10px; }
+    #soundtrack-page .form textarea { min-height: 70px; resize: vertical; }
+    #soundtrack-page .form .wide { grid-column: 1 / -1; }
+    #soundtrack-page #snippet { display: none; margin-top: 14px; white-space: pre-wrap; word-break: break-word; background: #050812; border: 2px solid var(--line); padding: 12px; font-size: 13px; color: var(--gold-soft); }
+    #soundtrack-page .soundtrack-footer { text-align: center; color: var(--muted); font-size: 14px; padding: 20px 16px 40px; }
+    @media (max-width: 760px) {
+      #soundtrack-page .deck { grid-template-columns: 1fr; padding: 18px; }
+      #soundtrack-page .crate { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #soundtrack-page .spin { animation: none; }
+      #soundtrack-page .record .vinyl, #soundtrack-page .tonearm { transition: none; }
+    }
+
+    /* ============================================================
+       CHAPTERS
+       ============================================================ */
+    main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+    .chapter { padding: 88px 0 24px; scroll-margin-top: 50px; }
+    .chapter-head { border-left: 6px solid var(--accent); padding-left: 18px; margin-bottom: 28px; }
+    .chapter-tag {
+      font-family: var(--pixel); font-size: 9px; color: var(--accent);
+      letter-spacing: 1px; margin-bottom: 12px;
+    }
+    .chapter h2 { font-family: var(--pixel); font-size: clamp(16px, 3vw, 24px); line-height: 1.5; }
+    .chapter h2 small { display: block; font-family: var(--body); font-size: 15px; font-weight: 500; color: var(--muted); margin-top: 8px; }
+    .chapter-intro { max-width: 760px; margin-top: 14px; color: var(--text); }
+    .req {
+      display: inline-block; margin-top: 14px;
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      border: 1px solid var(--accent); padding: 4px 10px;
+    }
+
+    .group-title { font-family: var(--pixel); font-size: 11px; color: var(--accent); margin: 30px 0 14px; line-height: 1.6; }
+    .group-title small { display: block; font-family: var(--body); font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+    .quests { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .quest {
+      background: linear-gradient(160deg, var(--panel-2), var(--panel));
+      border: 2px solid var(--line);
+      padding: 20px 20px 18px;
+      position: relative;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .quest:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .quest h3 { font-size: 16px; line-height: 1.4; margin-bottom: 10px; padding-right: 76px; }
+    .quest .status {
+      position: absolute; top: 18px; right: 16px;
+      font-family: var(--pixel); font-size: 8px; padding: 5px 6px;
+    }
+    .quest.done .status { background: var(--accent); color: #0b0b12; }
+    .quest.open .status { border: 1px dashed var(--muted); color: var(--muted); }
+    .quest p, .quest li { font-size: 15px; }
+    .quest p + p { margin-top: 12px; }
+    .quest ul { padding-left: 20px; margin-top: 6px; }
+    .quest .prompt { color: var(--muted); font-style: italic; }
+    .quest .links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; font-weight: 600; }
+
+    .boss {
+      margin: 8px 0 24px; padding: 18px 20px;
+      border: 2px solid #b04a6a; background: rgba(176,74,106,0.12);
+    }
+    .boss b { font-family: var(--pixel); font-size: 10px; color: #ff8fb1; display: block; margin-bottom: 8px; }
+
+    /* Side quest games */
+    .quest.game-quest { grid-column: 1 / -1; }
+    .quest-video { margin: 16px 0 4px; max-width: 760px; }
+    .quest-video video { width: 100%; display: block; border: 2px solid var(--line); background: #000; aspect-ratio: 16 / 9; }
+    .quest-video figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; font-style: italic; }
+    .game-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 14px; }
+    .game-panel { min-width: 0; padding: 14px; background: rgba(7,11,24,0.45); border: 2px solid var(--line); }
+    .game-panel h4 { font-family: var(--pixel); font-size: 9px; line-height: 1.6; color: var(--gold); margin-bottom: 10px; }
+    .game-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: min(100%, 220px); margin: 10px 0 14px; }
+    .game-cell {
+      aspect-ratio: 1; background: #0b1226; border: 2px solid var(--line); border-radius: 0;
+      color: var(--gold); font-family: var(--pixel); font-size: 18px; cursor: pointer;
+    }
+    .game-cell:hover:enabled, .game-cell:focus-visible { border-color: var(--accent); }
+    .game-cell:focus-visible, #snake-canvas:focus-visible { outline: 2px solid var(--energy); outline-offset: 2px; }
+    .game-cell:disabled { cursor: default; }
+    #game-status, #snake-status { min-height: 24px; font-size: 13px; font-weight: 600; color: var(--muted); }
+    #snake-canvas { display: block; width: 100%; height: auto; aspect-ratio: 320 / 288; border: 2px solid var(--line); image-rendering: pixelated; touch-action: none; }
+    #breakout-status { min-height: 24px; font-size: 13px; font-weight: 600; color: var(--muted); }
+    #breakout-canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; border: 2px solid var(--line); touch-action: none; }
+    #shooter-status { min-height: 24px; font-size: 13px; font-weight: 600; color: var(--muted); }
+    #shooter-canvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; border: 2px solid var(--line); cursor: crosshair; touch-action: none; }
+    #game-reset, #snake-reset, #breakout-reset, #shooter-reset { margin-top: 6px; }
+
+    /* Quest log */
+    .log { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 15px; }
+    .log th, .log td { border: 2px solid var(--line); padding: 12px; text-align: left; }
+    .log th { font-family: var(--pixel); font-size: 9px; color: var(--gold); background: var(--panel); }
+    .bar { height: 10px; background: #0b1226; border: 1px solid var(--line); min-width: 90px; }
+    .bar i { display: block; height: 100%; background: var(--gold); }
+    .ok { color: var(--gold); font-weight: 700; }
+
+    footer { text-align: center; padding: 60px 16px 30px; color: var(--muted); font-size: 14px; }
+    footer .btn { margin: 6px; }
+
+    /* ============================================================
+       JOURNEY BAR: the hero runs across as you scroll
+       ============================================================ */
+    .journey {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+      height: 72px;
+      background: rgba(7,11,24,0.95);
+      border-top: 2px solid var(--line);
+    }
+    #journey-canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+    .journey-label {
+      position: absolute; right: 14px; top: 8px;
+      font-family: var(--pixel); font-size: 8px; color: var(--gold);
+      pointer-events: none;
+    }
+
+    /* Achievement toast */
+    .toast {
+      position: fixed; left: 50%; bottom: 90px; z-index: 40;
+      transform: translate(-50%, 30px); opacity: 0;
+      background: var(--panel); border: 2px solid var(--gold);
+      box-shadow: 4px 4px 0 #000, 0 0 24px rgba(232,182,74,0.35);
+      padding: 12px 18px; text-align: center;
+      transition: transform 0.35s, opacity 0.35s;
+      pointer-events: none; max-width: calc(100% - 32px);
+    }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+    .toast b { font-family: var(--pixel); font-size: 8px; color: var(--gold); display: block; margin-bottom: 6px; }
+    .toast span { font-size: 14px; font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .quests { grid-template-columns: 1fr; }
+      .log th, .log td { padding: 8px; font-size: 13px; }
+      .game-grid { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 601px) and (max-width: 900px) {
+      .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .press-start { animation: none; }
+      .layer, .quest, .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HOMEPAGE / TITLE SCREEN
+       Required by the assignment: name, contact info, resume, LinkedIn.
+       The real links live in PROFILE (in the script below).
+       ============================================================ -->
+  <header class="title-screen" id="top">
+    <canvas id="sky" aria-hidden="true"></canvas>
+    <div class="layer" data-depth="12" aria-hidden="true">
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#101b3a" d="M0 220 L120 150 L240 200 L380 110 L520 190 L660 120 L820 210 L980 130 L1120 200 L1280 140 L1440 190 V320 H0Z"/></svg>
+    </div>
+    <div class="layer" data-depth="24" aria-hidden="true">
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#0b1430" d="M0 260 Q180 200 360 250 T720 240 T1080 255 T1440 230 V320 H0Z"/></svg>
+    </div>
+
+    <div class="title-content">
+      <p class="eyebrow">i.c.stars C60 · DIGITAL PORTFOLIO</p>
+      <h1 class="game-title">THE LEGEND OF ANDRE<span>RISE OF LEGACY</span></h1>
+      <canvas id="hero-title" width="12" height="16" aria-label="Pixel art of the hero: medium-long locks, navy coat, gold accents, sword on his back"></canvas>
+      <p class="who" id="who"></p>
+      <p class="who-sub" id="who-sub"></p>
+      <p class="quote">"Every step forward carries the experiences that came before it."</p>
+
+      <nav class="menu" id="menu" aria-label="Main menu"></nav>
+      <p class="contact-line" id="contact-line"></p>
+      <p class="press-start" aria-hidden="true">▼ SCROLL TO BEGIN YOUR JOURNEY ▼</p>
+    </div>
+  </header>
+
+  <nav class="world-map" aria-label="World map">
+    <ul id="world-map"></ul>
+  </nav>
+
+  <main id="world"></main>
+
+  <section class="soundtrack-page" id="soundtrack-page" aria-label="The Soundtrack">
+    <header class="soundtrack-header">
+      <p class="eyebrow">THE LEGEND OF ANDRE · SIDE B</p>
+      <h1>THE SOUNDTRACK</h1>
+      <p class="soundtrack-sub">Every hero has a soundtrack. These are the records that kept me moving, from the sales floor to the server room. Pick one from the crate and drop the needle.</p>
+      <a class="music-btn soundtrack-back" href="#top">← Back to Portfolio</a>
+    </header>
+    <section class="deck" id="deck" aria-label="Now spinning">
+      <div class="turntable">
+        <div class="platter"><div class="vinyl spin" id="deck-vinyl"><div class="label" id="deck-label"></div></div></div>
+        <div class="tonearm" aria-hidden="true"><div class="pivot"></div><div class="arm"></div><div class="head"></div></div>
+        <div class="power" aria-hidden="true"></div>
+      </div>
+      <div class="now" aria-live="polite">
+        <p class="tag">NOW SPINNING</p>
+        <h2 id="now-title"></h2>
+        <p class="artist" id="now-artist"></p>
+        <p class="meta" id="now-meta"></p>
+        <p class="note" id="now-note"></p>
+        <p class="fav" id="now-fav"></p>
+        <div class="controls"><button class="music-btn primary" id="play" type="button">▶ Drop the Needle</button><span id="listen"></span></div>
+      </div>
+    </section>
+    <h2 class="section-title">THE CRATE</h2>
+    <section class="crate" id="crate" aria-label="Record collection"></section>
+    <section class="editor" aria-label="Add a record">
+      <h2 class="section-title">ADD A RECORD</h2>
+      <p>Fill this in to preview a new record in the crate. Then copy the code it gives you and paste it into the CRATE list in legend.html so it stays on your live site.</p>
+      <form class="form" id="add-form">
+        <label>Album title<input name="title" required /></label>
+        <label>Artist<input name="artist" required /></label>
+        <label>Year<input name="year" inputmode="numeric" /></label>
+        <label>Favorite track<input name="favorite" /></label>
+        <label>Cover image path (optional)<input name="cover" placeholder="covers/my-album.jpg" /></label>
+        <label>Listen link (optional)<input name="listen" placeholder="https://open.spotify.com/..." /></label>
+        <label class="wide">Why it matters to me<textarea name="note"></textarea></label>
+        <div class="wide"><button class="music-btn primary" type="submit">Add to Crate</button></div>
+      </form>
+      <pre id="snippet"></pre>
+    </section>
+    <footer class="soundtrack-footer">© 2026 Andre Woolfolk · The Legend of Andre: Side B</footer>
+  </section>
+
+  <footer>
+    <div id="footer-links"></div>
+    <p style="margin-top:18px">© 2026 Andre Woolfolk · Built with HTML, CSS & JavaScript · Hosted on GitHub Pages</p>
+  </footer>
+
+  <div class="journey" aria-hidden="true">
+    <canvas id="journey-canvas"></canvas>
+    <div class="journey-label" id="journey-label">PROLOGUE</div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"><b>ACHIEVEMENT UNLOCKED</b><span></span></div>
+
+<script src="content.js"></script>
+<script>
+/* ==================================================================
+   PART 2: BUILDING THE PAGE FROM THE CONTENT
+   Why: one function draws every chapter. Without it you'd copy and
+   paste the same HTML 40 times, and fixing one typo in the layout
+   would mean fixing it 40 times.
+   ================================================================== */
+
+const $ = (sel) => document.querySelector(sel);
+const isDone = (q) => q.text.trim().length > 0;
+
+// Turns a link into a button, or a dimmed "soon" button if the URL is empty.
+// Why: the assignment says to test every link. This makes a broken link impossible.
+function linkButton(label, url, primary) {
+  if (!url) return `<span class="btn soon" aria-disabled="true">${label}</span>`;
+  const ext = url.startsWith("http") ? ' target="_blank" rel="noopener"' : "";
+  return `<a class="btn${primary ? " primary" : ""}" href="${url}"${ext}>${label}</a>`;
+}
+
+function renderHome() {
+  $("#who").textContent = PROFILE.name;
+  $("#who-sub").textContent = PROFILE.title;
+  $("#menu").innerHTML =
+    `<a class="btn primary" href="#prologue">New Adventure</a>` +
+    `<a class="btn" href="#soundtrack">Soundtrack</a>` +
+    linkButton("Play the Game", PROFILE.game) +
+    linkButton("Resume", PROFILE.resume) +
+    linkButton("LinkedIn", PROFILE.linkedin) +
+    linkButton("GitHub", PROFILE.github);
+  $("#contact-line").innerHTML = `Contact: <a href="mailto:${PROFILE.email}">${PROFILE.email}</a>`;
+  $("#footer-links").innerHTML =
+    `<a class="btn" href="mailto:${PROFILE.email}">Email Me</a>` +
+    linkButton("LinkedIn", PROFILE.linkedin) +
+    linkButton("Resume", PROFILE.resume) +
+    `<a class="btn" href="#top">Back to Title</a>`;
+}
+
+function renderQuest(q) {
+  const done = isDone(q);
+  const links = (q.links || []).filter(l => l.url)
+    .map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label} →</a>`).join("");
+  return `
+    <article class="quest ${q.bonus || q.wide ? "game-quest" : ""} ${done ? "done" : "open"}">
+      <span class="status">${q.bonus ? "BONUS" : done ? "CLEAR" : "IN PROGRESS"}</span>
+      <h3>${q.title}</h3>
+      ${done ? `<div>${q.text}</div>` : `<p class="prompt">${q.prompt}</p>`}
+      ${links ? `<div class="links">${links}</div>` : ""}
+    </article>`;
+}
+
+function renderChapter(ch) {
+  const groupsHtml = ch.groups.map(g => `
+    ${g.name ? `<h3 class="group-title">${g.name}<small>${g.sub} · complete at least ${g.min}</small></h3>` : ""}
+    <div class="quests">${g.quests.map(renderQuest).join("")}</div>
+  `).join("");
+
+  const mainMin = ch.groups.length === 1 ? ch.groups[0].min : 0;
+  const total = ch.groups.reduce((n, g) => n + g.quests.filter(q => !q.bonus).length, 0);
+
+  return `
+    <section class="chapter" id="${ch.id}" style="--accent:${ch.accent}" data-label="${ch.tag}" data-region="${ch.region}">
+      <div class="chapter-head">
+        <p class="chapter-tag">${ch.tag} · ${ch.section.toUpperCase()}</p>
+        <h2>${ch.region}<small>${ch.section}</small></h2>
+        <p class="chapter-intro">${ch.intro}</p>
+        ${mainMin ? `<span class="req">Quest requirement: ${mainMin} of ${total}</span>` : ""}
+      </div>
+      ${ch.boss ? `<div class="boss"><b>${ch.boss.name}</b>${ch.boss.text}</div>` : ""}
+      ${groupsHtml}
+    </section>`;
+}
+
+// The Quest Log counts finished quests and compares them to the minimums.
+// Why: it's your submission checklist, and it updates itself as you write.
+function renderQuestLog() {
+  const rows = [];
+  CHAPTERS.forEach(ch => ch.groups.forEach(g => {
+    if (!g.min) return;
+    const done = g.quests.filter(q => !q.bonus && isDone(q)).length;
+    const label = g.name ? `${ch.region}: ${g.name}` : `${ch.region} (${ch.tag.split("· ")[1] || ch.tag})`;
+    const pct = Math.min(100, Math.round(done / g.min * 100));
+    rows.push(`<tr><td>${label}</td><td>${done} / ${g.min}</td>
+      <td><div class="bar"><i style="width:${pct}%"></i></div></td>
+      <td>${done >= g.min ? '<span class="ok">CLEAR</span>' : "In progress"}</td></tr>`);
+  }));
+  return `
+    <section class="chapter" id="quest-log" style="--accent:#e8b64a" data-label="QUEST LOG" data-region="Quest Log">
+      <div class="chapter-head">
+        <p class="chapter-tag">QUEST LOG · DUE 11/23/2026</p>
+        <h2>Journey Progress<small>Every section's requirement, tracked automatically</small></h2>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="log">
+          <thead><tr><th>Region</th><th>Quests</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody>${rows.join("")}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
+function renderWorld() {
+  $("#world").innerHTML = CHAPTERS.map(renderChapter).join("") + renderQuestLog();
+  // Tab bar comes from TABS in content.js, so every page shares one tab bar.
+  $("#world-map").innerHTML = TABS
+    .map(t => `<li><a href="${t.href}">${t.label}</a></li>`).join("");
+}
+
+function syncPageView() {
+  const isSoundtrack = location.hash === "#soundtrack";
+  const wasSoundtrack = document.body.classList.contains("soundtrack-mode");
+  document.body.classList.toggle("soundtrack-mode", isSoundtrack);
+  if (isSoundtrack && !wasSoundtrack) {
+    void document.documentElement.offsetHeight;
+    const scrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+    getComputedStyle(document.documentElement).scrollBehavior;
+    window.scrollTo(0, 0);
+    document.documentElement.style.scrollBehavior = scrollBehavior;
+  }
+  dispatchEvent(new CustomEvent("portfolio-viewchange", { detail: { soundtrack: isSoundtrack } }));
+  document.querySelectorAll(".world-map a").forEach(a => {
+    a.classList.toggle("active", a.getAttribute("href") === (isSoundtrack ? "#soundtrack" : location.hash || "#top"));
+  });
+  if (!isSoundtrack && location.hash && location.hash !== "#top") {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target) target.scrollIntoView();
+    }));
+  }
+}
+
+document.querySelector(".world-map").addEventListener("click", event => {
+  const link = event.target.closest("a");
+  if (!link) return;
+  if (link.hash === "#soundtrack" || document.body.classList.contains("soundtrack-mode")) {
+    event.preventDefault();
+    history.pushState(null, "", link.hash);
+    syncPageView();
+  } else {
+    document.body.classList.remove("soundtrack-mode");
+  }
+});
+addEventListener("hashchange", syncPageView);
+addEventListener("popstate", syncPageView);
+
+
+/* ==================================================================
+   PART 3: THE HERO (pixel art drawn from text)
+   Why: each letter is one pixel color. Drawing the hero from a map
+   means you can redesign him by editing letters, no art app needed.
+   It's the same idea as a sprite sheet in Phaser.
+   ================================================================== */
+
+const COLORS = {
+  H: "#1a1108", // locks
+  S: "#8a5a3c", // skin
+  K: "#0b0b12", // eyes, boots
+  N: "#1f3466", // navy coat
+  G: "#e8b64a", // gold accents
+  W: "#dfe8f2"  // blade
+};
+const BODY = [
+  "....HHHH....",
+  "...HHHHHH...",
+  "..HHSSSSHH..",
+  "..HHSKSKHH..",
+  "..HHSSSSHH.W",
+  ".HH.SSSS.HHW",
+  ".H.GNNNNG.HW",
+  ".H.NNGGNN..W",
+  "..NNNGGNNN.G",
+  "..SNNNNNNS..",
+  "...NNNNNN...",
+  "...NNGGNN..."
+];
+const LEGS = [
+  ["...NN..NN...", "...NN..NN...", "...KK..KK...", "..KKK..KKK.."],  // standing
+  ["...NN.NN....", "..NN...NN...", "..KK....KK..", ".KKK....KKK."]   // running
+];
+
+function drawHero(ctx, x, y, frame, scale, tint, alpha) {
+  const rows = BODY.concat(LEGS[frame]);
+  ctx.globalAlpha = alpha;
+  rows.forEach((row, ry) => {
+    [...row].forEach((c, rx) => {
+      if (c === ".") return;
+      ctx.fillStyle = tint || COLORS[c];
+      ctx.fillRect(Math.round(x + rx * scale), Math.round(y + ry * scale), scale, scale);
+    });
+  });
+  ctx.globalAlpha = 1;
+}
+
+function drawTitleHero() {
+  const ctx = $("#hero-title").getContext("2d");
+  drawHero(ctx, 0, 0, 0, 1, null, 1);
+}
+
+
+/* ==================================================================
+   PART 4: THE JOURNEY BAR + AFTER-IMAGES
+   Why: scrolling IS the journey. As you scroll, the hero runs across
+   the bar and leaves after-images behind him, just like in the game.
+   They turn gold once he reaches the Future Kingdom: growth you can see.
+   ================================================================== */
+
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const jc = $("#journey-canvas");
+const jctx = jc.getContext("2d");
+let heroX = 0, targetX = 0, trail = [], frame = 0, frameTick = 0;
+let journeyFrame = null;
+const SCALE = 3, HERO_W = 12 * SCALE;
+
+function sizeJourney() {
+  jc.width = jc.clientWidth;
+  jc.height = jc.clientHeight;
+}
+
+function scrollProgress() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  return max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+}
+
+function journeyLoop() {
+  journeyFrame = null;
+  if (document.body.classList.contains("soundtrack-mode")) return;
+  const w = jc.width, h = jc.height;
+  const pad = 24;
+  // RACE: while the buddy is racing, buddy.js sets window.journeyRaceX and the
+  // hero runs there instead of following your scroll. Back to normal after.
+  const raceX = window.journeyRaceX;
+  targetX = raceX != null ? raceX : pad + scrollProgress() * (w - pad * 2 - HERO_W);
+
+  // Ease toward the target so the hero runs instead of teleporting.
+  const prev = heroX;
+  heroX += (targetX - heroX) * (reduceMotion ? 1 : raceX != null ? 0.3 : 0.12);
+  // Share the track size so buddy.js knows where the start and finish lines are.
+  window.journeyPad = pad; window.journeyHeroW = HERO_W;
+  const moving = Math.abs(heroX - prev) > 0.4;
+
+  // createAfterImage(): remember where he was, then fade it out.
+  if (moving && !reduceMotion) trail.push({ x: prev, life: 1 });
+  trail.forEach(t => t.life -= 0.06);
+  trail = trail.filter(t => t.life > 0).slice(-6);
+
+  if (moving && ++frameTick % 6 === 0) frame = 1 - frame;
+  if (!moving) frame = 0;
+
+  // Draw ground, chapter markers, ghosts, then the hero on top.
+  jctx.clearRect(0, 0, w, h);
+  const groundY = h - 10;
+  jctx.fillStyle = "#1a2a52";
+  jctx.fillRect(pad, groundY, w - pad * 2, 3);
+  jctx.fillStyle = "#e8b64a";
+  jctx.fillRect(pad, groundY, heroX - pad + HERO_W / 2, 3);
+
+  const golden = scrollProgress() > 0.78;
+  const ghostColor = golden ? "#e8b64a" : "#5ad1ff";
+  trail.forEach(t => drawHero(jctx, t.x, groundY - 16 * SCALE, frame, SCALE, ghostColor, t.life * 0.35));
+  drawHero(jctx, heroX, groundY - 16 * SCALE, frame, SCALE, null, 1);
+
+  journeyFrame = requestAnimationFrame(journeyLoop);
+}
+
+addEventListener("portfolio-viewchange", event => {
+  if (!event.detail.soundtrack && journeyFrame === null) journeyFrame = requestAnimationFrame(journeyLoop);
+});
+
+
+/* ==================================================================
+   PART 5: TITLE SCREEN MOTION (particles + cursor parallax)
+   Why: nothing in the world is static. Particles drift, and the
+   mountains shift with your mouse to fake 3D depth.
+   ================================================================== */
+
+function startSky() {
+  const c = $("#sky"), ctx = c.getContext("2d");
+  let parts = [];
+  let skyFrame = null;
+  const resize = () => {
+    c.width = c.clientWidth; c.height = c.clientHeight;
+    parts = Array.from({ length: Math.min(90, Math.floor(c.width / 14)) }, () => ({
+      x: Math.random() * c.width, y: Math.random() * c.height,
+      r: Math.random() * 2 + 0.5, v: Math.random() * 0.3 + 0.1,
+      gold: Math.random() < 0.25
+    }));
+  };
+  resize(); addEventListener("resize", resize);
+
+  function tick() {
+    skyFrame = null;
+    if (document.body.classList.contains("soundtrack-mode")) return;
+    const g = ctx.createLinearGradient(0, 0, 0, c.height);
+    g.addColorStop(0, "#070b18"); g.addColorStop(1, "#16234a");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, c.width, c.height);
+    parts.forEach(p => {
+      if (!reduceMotion) { p.y -= p.v; if (p.y < -4) { p.y = c.height + 4; p.x = Math.random() * c.width; } }
+      ctx.fillStyle = p.gold ? "rgba(232,182,74,0.8)" : "rgba(90,209,255,0.6)";
+      ctx.fillRect(p.x, p.y, p.r, p.r);
+    });
+    skyFrame = requestAnimationFrame(tick);
+  }
+  const scheduleSky = () => {
+    if (!document.body.classList.contains("soundtrack-mode") && skyFrame === null) skyFrame = requestAnimationFrame(tick);
+  };
+  addEventListener("portfolio-viewchange", scheduleSky);
+  scheduleSky();
+
+  if (!reduceMotion) {
+    addEventListener("mousemove", (e) => {
+      const dx = e.clientX / innerWidth - 0.5;
+      document.querySelectorAll(".layer").forEach(l => {
+        l.style.transform = `translateX(${dx * -l.dataset.depth}px)`;
+      });
+    });
+  }
+}
+
+
+/* ==================================================================
+   PART 6: ACHIEVEMENTS + MAP HIGHLIGHT
+   Why: an IntersectionObserver tells us when a chapter scrolls into
+   view, so we can unlock an achievement once per chapter.
+   ================================================================== */
+
+function startObservers() {
+  const seen = new Set();
+  const toast = $("#toast");
+  let timer;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const id = en.target.id;
+      $("#journey-label").textContent = en.target.dataset.label;
+      if (location.hash !== "#soundtrack") {
+        document.querySelectorAll(".world-map a").forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+      }
+      if (!seen.has(id)) {
+        seen.add(id);
+        toast.querySelector("span").textContent = "Entered: " + en.target.dataset.region;
+        toast.classList.add("show");
+        clearTimeout(timer);
+        timer = setTimeout(() => toast.classList.remove("show"), 2200);
+      }
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll(".chapter").forEach(s => io.observe(s));
+}
+
+/* ==================================================================
+   PART 7: THE SOUNDTRACK
+   ================================================================== */
+
+(function initSoundtrack() {
+  const records = [
+    { title: "Album Title One", artist: "Artist Name", year: "2016", favorite: "Track name", note: "Write one or two sentences about when this record found you and why it stuck. Maybe the shift it got you through, or the moment it reminds you of.", cover: "", listen: "", colors: ["#e8b64a", "#b8432f"] },
+    { title: "Album Title Two", artist: "Artist Name", year: "2011", favorite: "Track name", note: "Why does this one matter to you?", cover: "", listen: "", colors: ["#5ad1ff", "#1f3466"] },
+    { title: "Album Title Three", artist: "Artist Name", year: "2020", favorite: "Track name", note: "Why does this one matter to you?", cover: "", listen: "", colors: ["#b48cff", "#2a1a52"] },
+    { title: "Album Title Four", artist: "Artist Name", year: "1998", favorite: "Track name", note: "Why does this one matter to you?", cover: "", listen: "", colors: ["#58c48a", "#123a2a"] }
+  ];
+  const $ = selector => document.querySelector("#soundtrack-page " + selector);
+  const esc = text => String(text ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+  function hash(text) { let value = 7; for (const char of text) value = (value * 31 + char.charCodeAt(0)) >>> 0; return value; }
+  function colorsFor(record) {
+    if (record.colors && record.colors.length === 2) return record.colors;
+    const hue = hash(record.title + record.artist) % 360;
+    return [`hsl(${hue} 70% 60%)`, `hsl(${(hue + 150) % 360} 55% 25%)`];
+  }
+  function initials(title) { return title.split(/\s+/).filter(Boolean).slice(0, 2).map(word => word[0].toUpperCase()).join(""); }
+  function sleeveArt(record) {
+    if (record.cover) return `<img src="${esc(record.cover)}" alt="Cover of ${esc(record.title)} by ${esc(record.artist)}" loading="lazy" />`;
+    const [first, second] = colorsFor(record);
+    const number = hash(record.title);
+    const style = number % 3;
+    const background = style === 0 ? `repeating-conic-gradient(from ${number % 90}deg at 30% 70%, ${first} 0 8deg, ${second} 8deg 16deg)` :
+      style === 1 ? `repeating-linear-gradient(${number % 180}deg, ${first} 0 14px, ${second} 14px 28px)` :
+        `radial-gradient(circle at 70% 30%, ${first} 0 18%, transparent 19%), radial-gradient(circle at 30% 65%, ${first} 0 28%, ${second} 29% 34%, transparent 35%), ${second}`;
+    return `<div class="art" style="background:${background}"><span class="initials">${esc(initials(record.title))}</span></div>`;
+  }
+  function labelArt(record) {
+    const [first, second] = colorsFor(record);
+    return { style: `--c1:${first};--c2:${second}`, html: record.cover ? `<img src="${esc(record.cover)}" alt="" />` : "" };
+  }
+
+  let current = 0;
+  let playing = false;
+  function renderCrate() {
+    $("#crate").innerHTML = records.map((record, index) => {
+      const label = labelArt(record);
+      return `<button class="record${index === current ? " active" : ""}" type="button" data-i="${index}" aria-label="Spin ${esc(record.title)} by ${esc(record.artist)}">
+        <span class="sleeve-wrap" style="display:block"><span class="vinyl" style="${label.style}"><span class="label">${label.html}</span></span>
+        <span class="sleeve" style="display:block">${sleeveArt(record)}</span></span>
+        <span class="title">${esc(record.title)}</span><span class="by">${esc(record.artist)}${record.year ? " · " + esc(record.year) : ""}</span></button>`;
+    }).join("");
+  }
+  function setPlaying(on) {
+    playing = on;
+    $("#deck").classList.toggle("playing", on);
+    $("#play").textContent = on ? "❚❚ Lift the Needle" : "▶ Drop the Needle";
+  }
+  function selectRecord(index, autoplay) {
+    current = index;
+    const record = records[index];
+    const label = labelArt(record);
+    $("#deck-vinyl").setAttribute("style", label.style);
+    $("#deck-label").innerHTML = label.html;
+    $("#now-title").textContent = record.title;
+    $("#now-artist").textContent = record.artist;
+    $("#now-meta").textContent = record.year ? `Released ${record.year}` : "";
+    $("#now-note").textContent = record.note || "";
+    $("#now-fav").innerHTML = record.favorite ? `Favorite track: <b>${esc(record.favorite)}</b>` : "";
+    $("#listen").innerHTML = record.listen ? `<a class="music-btn" href="${esc(record.listen)}" target="_blank" rel="noopener">Listen ↗</a>` : "";
+    $("#crate").querySelectorAll(".record").forEach(button => button.classList.toggle("active", Number(button.dataset.i) === index));
+    setPlaying(autoplay ?? playing);
+  }
+  $("#crate").addEventListener("click", event => {
+    const button = event.target.closest(".record");
+    if (button) selectRecord(Number(button.dataset.i), true);
+  });
+  $("#play").addEventListener("click", () => setPlaying(!playing));
+
+  if (new URLSearchParams(location.search).has("edit")) document.getElementById("soundtrack-page").classList.add("edit-mode");
+  $("#add-form").addEventListener("submit", event => {
+    event.preventDefault();
+    const form = Object.fromEntries(new FormData(event.target).entries());
+    const record = { title: form.title.trim(), artist: form.artist.trim(), year: form.year.trim(), favorite: form.favorite.trim(),
+      note: form.note.trim(), cover: form.cover.trim(), listen: form.listen.trim() };
+    records.push(record);
+    renderCrate();
+    selectRecord(records.length - 1, true);
+    const snippet = $("#snippet");
+    snippet.style.display = "block";
+    snippet.textContent = "Paste this inside the records list in legend.html (add a comma after the record before it):\n\n" +
+      `  { title: ${JSON.stringify(record.title)}, artist: ${JSON.stringify(record.artist)}, year: ${JSON.stringify(record.year)}, favorite: ${JSON.stringify(record.favorite)},\n` +
+      `    note: ${JSON.stringify(record.note)},\n    cover: ${JSON.stringify(record.cover)}, listen: ${JSON.stringify(record.listen)} }`;
+    event.target.reset();
+  });
+  renderCrate();
+  selectRecord(0, false);
+})();
+
+
+/* ==================================================================
+   START THE GAME
+   ================================================================== */
+renderHome();
+renderWorld();
+drawTitleHero();
+sizeJourney();
+addEventListener("resize", sizeJourney);
+journeyLoop();
+startSky();
+startObservers();
+syncPageView();
+</script>
+<script src="game.js" defer></script>
+  <!-- My buddy: busts out of the screen and races the running man (see buddy.js). -->
+  <script src="buddy.js"></script>
+</body>
+</html>
