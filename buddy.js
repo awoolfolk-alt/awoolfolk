@@ -6,8 +6,7 @@
    Why it's wrapped in (function(){ ... })(): the game page has its
    own code with short names like $ and COLORS. The wrapper keeps the
    buddy's names private so the two never clash.
-   What he does: busts out of the screen the first time you move the
-   mouse, follows your cursor with his eyes, drag him anywhere, drop
+   What he does: busts out of the screen as soon as the page opens, follows your cursor with his eyes, drag him anywhere, drop
    him on a side (leans) or the top (hangs), click him for emotes,
    press-and-hold to charge an energy beam, drop him on the
    running man's line at the bottom and they race, and after 5 idle minutes
@@ -395,39 +394,51 @@ function entrance(){
   mode='entrance';ef=0;B.style.opacity=0;
   const W=innerWidth,H=innerHeight,cx=bx+60,cy=by+66;crack.width=W;crack.height=H;crack.style.left='0px';crack.style.top='0px';
   const cc=crack.getContext('2d');
-  const mains=Array.from({length:13},(_,i)=>{const a=i/13*6.28+(Math.random()-.5)*.4;return jag(cx,cy,a,180+Math.random()*360,10)});
-  const branches=[];mains.forEach(m=>{for(let k=0;k<3;k++){const at=m[Math.floor(m.length*(.25+Math.random()*.6))];const a=Math.atan2(at[1]-cy,at[0]-cx)+(Math.random()<.5?-1:1)*(.5+Math.random()*.6);branches.push({from:m.indexOf(at)/m.length,pts:jag(at[0],at[1],a,40+Math.random()*120,8)})}});
+  const mains=Array.from({length:13},(_,i)=>{const a=i/13*6.28+(Math.random()-.5)*.4;return jag(cx,cy,a,70+Math.random()*130,10)});
+  const branches=[];mains.forEach(m=>{for(let k=0;k<3;k++){const at=m[Math.floor(m.length*(.25+Math.random()*.6))];const a=Math.atan2(at[1]-cy,at[0]-cx)+(Math.random()<.5?-1:1)*(.5+Math.random()*.6);branches.push({from:m.indexOf(at)/m.length,pts:jag(at[0],at[1],a,15+Math.random()*45,8)})}});
   const hole=Array.from({length:14},(_,i)=>{const a=i/14*6.28;const r=46+Math.random()*30;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r*.85]});
   const shards=Array.from({length:30},()=>({a:Math.random()*6.28,v:3+Math.random()*7,s:6+Math.random()*12,r:Math.random()*6,vr:(Math.random()-.5)*.3}));
   const wrap=shakeEl;
-  const path=(pts,frac)=>{const n=Math.max(1,Math.floor(pts.length*frac));cc.beginPath();cc.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<n;i++)cc.lineTo(pts[i][0],pts[i][1]);cc.stroke()};
-  const HIT=[0,32,64],SHATTER=100,HEAL=reduced?240:1500;let k=0;
-  (function tick(){k++;cc.clearRect(0,0,W,H);
-    let grow=k<SHATTER?Math.min(1,(1+HIT.filter(h=>k>=h).length-1)/3+Math.min(1,((k-HIT.filter(h=>k>=h).slice(-1)[0])/10))/3):1;
-    let heal=k>SHATTER?Math.min(1,(k-SHATTER)/HEAL):0;
-    const frac=grow*(1-heal), alpha=1-heal*.6;
-    if(!reduced&&HIT.some(h=>k>=h&&k<h+6))wrap.style.transform='translate('+((k%2)?3:-3)+'px,0)';else wrap.style.transform='';
-    // cracks (dark under-line + bright glass line)
+  // Draws a crack up to a fraction of its length. The last segment is cut
+  // part-way (not rounded to a whole point), so growing and healing glide smoothly.
+  const path=(pts,frac)=>{if(frac<=0)return;const f=Math.min(1,frac)*(pts.length-1),n=Math.floor(f),r=f-n;cc.beginPath();cc.moveTo(pts[0][0],pts[0][1]);
+    for(let i=1;i<=n;i++)cc.lineTo(pts[i][0],pts[i][1]);
+    if(r>0&&n+1<pts.length)cc.lineTo(pts[n][0]+(pts[n+1][0]-pts[n][0])*r,pts[n][1]+(pts[n+1][1]-pts[n][1])*r);cc.stroke()};
+  /* TIMELINE (milliseconds, measured with the real clock so it runs the same
+     speed on every screen, 60Hz or 144Hz):
+       0 – 1667 ms   bust-in: three hits on the glass, then it shatters
+       1667 – 10000  the cracks heal and fade away, smooth and steady
+     Total: 10 seconds. To tweak it, change BUST or TOTAL. */
+  const HIT=[0,533,1067],BUST=1667,TOTAL=reduced?4000:10000,HEAL=TOTAL-BUST;
+  const smooth=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2; // ease in-out: starts gently, ends gently
+  const t0=performance.now();let k=0,out=false;
+  (function tick(now){k++;const t=now-t0;cc.clearRect(0,0,W,H);
+    const hits=HIT.filter(h=>t>=h),last=hits[hits.length-1];
+    const grow=t<BUST?Math.min(1,(hits.length-1)/3+Math.min(1,(t-last)/167)/3):1;
+    const heal=t>BUST?smooth(Math.min(1,(t-BUST)/HEAL)):0;
+    const frac=grow*(1-heal),alpha=1-heal;
+    if(!reduced&&HIT.some(h=>t>=h&&t<h+100))wrap.style.transform='translate('+((k%2)?3:-3)+'px,0)';else wrap.style.transform='';
+    // cracks (dark under-line + bright glass line), fading out as they heal
     cc.lineJoin='round';
-    [['rgba(7,5,26,.55)',4],['rgba(235,245,255,'+(.95*alpha)+')',2]].forEach(([col,w])=>{cc.strokeStyle=col;cc.lineWidth=w;
-      mains.forEach(m=>path(m,frac));branches.forEach(b=>{if(frac>b.from)path(b.pts,Math.min(1,(frac-b.from)/(1-b.from)))})});
+    [['rgba(7,5,26,'+(.55*alpha)+')',4],['rgba(235,245,255,'+(.95*alpha)+')',2]].forEach(([col,w])=>{cc.strokeStyle=col;cc.lineWidth=w;
+      mains.forEach(m=>path(m,frac));branches.forEach(b=>{if(frac>b.from)path(b.pts,(frac-b.from)/(1-b.from))})});
     // impact glint while pounding
-    if(k<SHATTER){cc.fillStyle='rgba(255,255,255,'+(HIT.some(h=>k>=h&&k<h+8)?.9:.25)+')';cc.beginPath();cc.arc(cx,cy,10+grow*14,0,6.28);cc.fill()}
-    // shattered hole that slowly shrinks and seals
-    if(k>=SHATTER){const hs=1-heal;cc.globalAlpha=.85*hs;cc.fillStyle='#07051a';cc.beginPath();hole.forEach(([x,y],i)=>{const X=cx+(x-cx)*hs,Y=cy+(y-cy)*hs;i?cc.lineTo(X,Y):cc.moveTo(X,Y)});cc.closePath();cc.fill();
+    if(t<BUST){cc.fillStyle='rgba(255,255,255,'+(HIT.some(h=>t>=h&&t<h+133)?.9:.25)+')';cc.beginPath();cc.arc(cx,cy,10+grow*14,0,6.28);cc.fill()}
+    // shattered hole that shrinks and seals
+    if(t>=BUST){const hs=1-heal;cc.globalAlpha=.85*hs;cc.fillStyle='#07051a';cc.beginPath();hole.forEach(([x,y],i)=>{const X=cx+(x-cx)*hs,Y=cy+(y-cy)*hs;i?cc.lineTo(X,Y):cc.moveTo(X,Y)});cc.closePath();cc.fill();
       cc.strokeStyle='rgba(191,249,255,'+hs+')';cc.lineWidth=2;cc.stroke();cc.globalAlpha=1;
-      // flying shards right after the break
-      if(k<SHATTER+60&&!reduced){const p=(k-SHATTER)/60;shards.forEach(sh=>{sh.r+=sh.vr;const r=sh.v*p*60;cc.save();cc.translate(cx+Math.cos(sh.a)*r,cy+Math.sin(sh.a)*r+p*p*120);cc.rotate(sh.r);cc.globalAlpha=1-p;cc.fillStyle='#bff9ff';cc.fillRect(-sh.s/2,-sh.s/4,sh.s,sh.s/2);cc.restore()});cc.globalAlpha=1}
-      // repair sparkles crawl back along the cracks while it heals
-      if(!reduced&&heal>0&&heal<1){mains.forEach((m,i)=>{const n=Math.floor(m.length*frac);if(n>1&&(k+i*5)%10<6){const [x,y]=m[n-1];cc.fillStyle=i%2?'#39ff8e':'#9df9ff';cc.fillRect(x-2,y-2,4,4)}})}}
-    if(k===SHATTER){B.style.opacity=1;mode='emote';emote='cheer';ef=0;say('I\'m out!')}
-    if(k<SHATTER+HEAL)requestAnimationFrame(tick);else{cc.clearRect(0,0,W,H);crack.remove()}})()}
+      // flying shards for the first second after the break
+      if(t<BUST+1000&&!reduced){const p=(t-BUST)/1000;shards.forEach(sh=>{const r=sh.v*p*60;cc.save();cc.translate(cx+Math.cos(sh.a)*r,cy+Math.sin(sh.a)*r+p*p*120);cc.rotate(sh.r+sh.vr*p*60);cc.globalAlpha=1-p;cc.fillStyle='#bff9ff';cc.fillRect(-sh.s/2,-sh.s/4,sh.s,sh.s/2);cc.restore()});cc.globalAlpha=1}
+      // repair sparkles ride the tip of each crack as it pulls back
+      if(!reduced&&heal>0&&heal<1){mains.forEach((m,i)=>{const f=frac*(m.length-1),n=Math.floor(f),r=f-n;if(n>=1&&n+1<m.length&&(k+i*5)%10<6){const x=m[n][0]+(m[n+1][0]-m[n][0])*r,y=m[n][1]+(m[n+1][1]-m[n][1])*r;cc.globalAlpha=alpha;cc.fillStyle=i%2?'#39ff8e':'#9df9ff';cc.fillRect(x-2,y-2,4,4);cc.globalAlpha=1}})}}
+    if(t>=BUST&&!out){out=true;B.style.opacity=1;mode='emote';emote='cheer';ef=0;say('I\'m out!')}
+    if(t<TOTAL)requestAnimationFrame(tick);else{cc.clearRect(0,0,W,H);crack.remove();wrap.style.transform=''}})(t0)}
 const saved=store('pos');if(saved){try{const p=JSON.parse(saved);bx=Math.min(Math.max(-60,p[0]),innerWidth-120);by=Math.min(Math.max(-60,p[1]),innerHeight-132)}catch(e){}}
 place();
 if(store('seen')||!lineEl()){store('seen','1');B.style.opacity=1;mode='idle';crack.remove()}else{B.style.opacity=0;mode='waiting';store('seen','1');
 // trigger: the first time the cursor moves on the page (or a tap on touch screens)
-(function arm(){const go=()=>{removeEventListener('pointermove',go);removeEventListener('pointerdown',go);if(reduced){B.style.opacity=1;mode='idle';return}entrance()};
-  addEventListener('pointermove',go);addEventListener('pointerdown',go)})()}
+// He busts out the moment the page opens (no waiting for the mouse).
+requestAnimationFrame(()=>entrance())}
 const IDLES=['idle','look','stretch','meditate','sleepy'];
 function sitDown(){mode='chair';emote='gaming';ef=0;chairPop=0;menu.classList.remove('open');say('Game time!')}
 function standUp(){mode='emote';emote='wave';ef=0;chairPop=-1;say('Oh hey! Pausing my game.')}
